@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My chat app</title>
+    <script src="https://cdn.socket.io/4.7.3/socket.io.min.js" integrity="sha384-+miq58Ltmjm+SSP5g8Ok6dpMO/6R4n8xe/x1Yj0Bdb9kiEz25LTnWv/GZQTRQamg" crossorigin="anonymous"></script>
+</head>
+<body style="background-color: bisque; ">
+    <h1 style="color: rgb(126, 88, 230); font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;"></h1>
+<div style="display: flex; justify-content: start; align-items: end;">
+     <input type="text"class="sendMe" style="height: 100px; width: 400px; border-radius: 0 15px 15px 15px; background-color: lightgray;">
+
+
+     <button onclick="chatFunc()" style="background-color: rgb(126, 88, 230); border: solid 1px; color: aliceblue; border-radius: 5px; margin-left: 20px;">SEND CHAT</button>
+</div>
+
+    <h2 style="color: rgb(126, 88, 230); font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; font-size: 20px; margin-left: 20px;"></h2>
+
+    <ul style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 20px; color: rgb(126, 88, 230); margin-left: 20px;" id="messages"></ul> 
+
+    <script>
+ let userName;
+do {
+  userName = prompt("Enter your name");
+  if (userName.length < 1 || userName == null) {
+    alert("Please enter your name!");
+  }
+} while (userName.length < 1 || userName == null);
+document.querySelector("h1").innerHTML=`Hello ${userName}, welcome to my chat application`
+const socket=io("http://localhost:1234")
+
+// Display message history
+socket.on('message history', function (history) {
+      const messagesList = document.getElementById('messages');
+      history.forEach(message => {
+        const newMessage = document.createElement('li');
+        newMessage.textContent = message;
+        messagesList.appendChild(newMessage);
+      });
+    });
+
+
+    socket.on("message", (data) => {
+    const messagesList = document.getElementById('messages');
+
+      // Display other clients' messages in the ul element
+      const newMessage = document.createElement('li');
+      newMessage.textContent = data;
+      messagesList.appendChild(newMessage);
+  });
+
+const chatFunc=()=>{
+const messageToBeSent=document.querySelector(".sendMe").value
+socket.emit("message",`message from ${userName} :`+ " " +messageToBeSent)
+
+
+  // Append the message to the DOM immediately
+  const messagesList = document.getElementById('messages');
+  const newMessage = document.createElement('li');
+  newMessage.textContent = "You: " + messageToBeSent;
+  messagesList.appendChild(newMessage);
+
+}
+
+
+
+    </script>
+</body>
+</html>

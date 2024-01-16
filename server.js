@@ -22,6 +22,7 @@ server.listen(port, ()=>{
 io.on("connection", (socket)=>{
 
     socket.broadcast.emit('message history', messageHistory);
+      
     socket.on('message', (data)=>{
         messageHistory.push(data);
         socket.broadcast.emit('message', data)

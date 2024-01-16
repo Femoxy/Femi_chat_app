@@ -34,9 +34,9 @@ const socket=io("http://localhost:1234")
 socket.on('message history', function (history) {
       const messagesList = document.getElementById('messages');
       history.forEach(message => {
-        const newMessage = document.createElement('li');
-        newMessage.textContent = message;
-        messagesList.appendChild(newMessage);
+        const listItem = document.createElement('li');
+        listItem.textContent = message;
+        messagesList.appendChild(listItem);
       });
     });
 
@@ -45,21 +45,20 @@ socket.on('message history', function (history) {
     const messagesList = document.getElementById('messages');
 
       // Display other clients' messages in the ul element
-      const newMessage = document.createElement('li');
-      newMessage.textContent = data;
-      messagesList.appendChild(newMessage);
+      const listItem = document.createElement('li');
+      listItem.textContent = data;
+      messagesList.appendChild(listItem);
   });
 
 const chatFunc=()=>{
 const messageToBeSent=document.querySelector(".sendMe").value
-socket.emit("message",`message from ${userName} :`+ " " +messageToBeSent)
-
+socket.emit("message",`message from ${userName}`+ ":" + " " +messageToBeSent)
 
   // Append the message to the DOM immediately
-  const messagesList = document.getElementById('messages');
-  const newMessage = document.createElement('li');
-  newMessage.textContent = "You: " + messageToBeSent;
-  messagesList.appendChild(newMessage);
+  const messagesList = document.getElementById('messages');   
+  const listItem = document.createElement('li');
+  listItem.textContent = "You: " + messageToBeSent;
+  messagesList.appendChild(listItem);
 
 }
 

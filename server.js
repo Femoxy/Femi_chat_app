@@ -14,11 +14,6 @@ app.get("/", (req, res)=>{
     res.render("homepage", {messageHistory})
 })
 
-
-server.listen(port, ()=>{
-    console.log('listening on port' +port)
-});
-
 io.on("connection", (socket)=>{
 
     socket.broadcast.emit('message history', messageHistory);
@@ -28,3 +23,7 @@ io.on("connection", (socket)=>{
         socket.broadcast.emit('message', data)
     })
 })
+
+server.listen(port, ()=>{
+    console.log('listening on port' +port)
+});

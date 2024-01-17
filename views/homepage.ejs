@@ -20,50 +20,49 @@
     <ul style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 20px; color: rgb(126, 88, 230); margin-left: 20px;" id="messages"></ul> 
 
     <script>
- let userName;
-do {
-  userName = prompt("Enter your name");
-  if (userName.length < 1 || userName == null) {
-    alert("Please enter your name!");
-  }
-} while (userName.length < 1 || userName == null);
-document.querySelector("h1").innerHTML=`Hello ${userName}, welcome to my chat application`
-const socket=io("https://safemi-app.onrender.com ")
+      let userName;
+      do {
+        userName = prompt("Enter your name");
+        if (userName.length < 1 || userName == null) {
+          alert("Please enter your name!");
+        }
+      } while (userName.length < 1 || userName == null);
+      document.querySelector("h1").innerHTML=`Hello ${userName} welcome to my chat application`
+      const socket=io("http://safemi-app.onrender.com")
+      
+      // Display message history
+      socket.on('message history', function (history) {
+            const messagesList = document.getElementById('messages');
+            history.forEach(message => {
+              const listItem = document.createElement('li');
+              listItem.textContent = message;
+              messagesList.appendChild(listItem);
+            });
+          });
+      
+      
+          socket.on("message", (data) => {
+          const messagesList = document.getElementById('messages');
+      
+            // Display other clients' messages in the ul element
+            const listItem = document.createElement('li');
+            listItem.textContent = data;
+            messagesList.appendChild(listItem);
+        });
+      
+      const chatFunc=()=>{
+      const messageToBeSent=document.querySelector(".sendMe").value
+      socket.emit("message","mesage from "+userName+":   "+messageToBeSent);
+      
 
-// Display message history
-socket.on('message history', function (history) {
-      const newMessage = document.getElementById('messages');
-      history.forEach(message => {
+        // Append the message to the DOM immediately
+        const messagesList = document.getElementById('messages');
         const listItem = document.createElement('li');
-        listItem.textContent = message;
-        newMessage.appendChild(listItem);
-      });
-    });
+        listItem.textContent = "You: " + messageToBeSent;
+        messagesList.appendChild(listItem);
+        document.querySelector(".sendMe").value = "";
 
-
-    socket.on("message", (data) => {
-    const newMessage = document.getElementById('messages');
-
-      // Display other clients' messages in the ul element
-      const listItem = document.createElement('li');
-      listItem.textContent = data;
-      newMessage.appendChild(listItem);
-  });
-
-const chatFunc=()=>{
-const messageToBeSent=document.querySelector(".sendMe").value
-socket.emit("message",`message from ${userName}:` + " " +messageToBeSent)
-
-  // Append the message to the DOM immediately
-  const newMessage = document.getElementById('messages');   
-  const listItem = document.createElement('li');
-  listItem.textContent = "You: " + messageToBeSent;
-  newMessage.appendChild(listItem);
-
-}
-
-
-
-    </script>
+           }
+          </script>
 </body>
 </html>
